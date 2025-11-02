@@ -1,0 +1,26 @@
+services:
+  bdados:
+    image: postgres:18
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: series
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer-gbd
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - bdados
+
+volumes:
+  postgres_data:
+    driver: local
