@@ -19,6 +19,6 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
 
     List<Serie> findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(Integer totalTemporadas, Double avaliacao);
 
-    @Query("")
-    List<Serie> seriePorTemporadaEAvaliacao();
+    @Query("select s from Serie s WHERE s.totalTemporadas <= :totalTemporadas AND s.avaliacao >= :avaliacao")
+    List<Serie> seriePorTemporadaEAvaliacao(Integer totalTemporadas, Double avaliacao);
 }
