@@ -1,31 +1,55 @@
 package br.com.alura.screenmatch.controller;
 
+import br.com.alura.screenmatch.dto.EpisodioDTO;
 import br.com.alura.screenmatch.dto.SerieDTO;
-import br.com.alura.screenmatch.model.Serie;
-import br.com.alura.screenmatch.repository.SerieRepository;
+import br.com.alura.screenmatch.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/series")
 public class SerieController {
     @Autowired
-    private SerieRepository repositorio;
+    private SerieService serieService;
 
-    @GetMapping("/series")
+    @GetMapping
     public List<SerieDTO> obterSeries() {
-        return repositorio.findAll()
-                .stream()
-                .map(s -> new SerieDTO(s.getId(),
-                        s.getTitulo(),
-                        s.getTotalTemporadas(),
-                        s.getAvaliacao(),
-                        s.getGenero(), s.getAtores(),
-                        s.getPoster(), s.getSinopse()))
-                .collect(Collectors.toList());
+        return serieService.obterTodasAsSeries();
     }
 
+    @GetMapping("/top5")
+    public List<SerieDTO> obterTop5Series() {
+        return serieService.obterTop5Series();
+    }
+
+    @GetMapping("/lancamentos")
+    public List<SerieDTO> obterLancamentos() {
+        return serieService.obterLancamentos();
+    }
+
+    @GetMapping("/categoria/{nomeGenero}")
+    public List<SerieDTO> obterSeriesPorCategoria(@PathVariable String nomeGenero) {
+        return serieService.obterSeriesPorCategoria(nomeGenero);
+    }
+
+
+    @GetMapping("/{id}/temporadas/todas")
+    public List<EpisodioDTO> obterTodasTemporadas(@PathVariable Long id) {
+        return serieService.obterTodasTemporadas(id);
+    }
+    @GetMapping("/{id}/temporadas/{numero}")
+    public List<EpisodioDTO> obterTemporadasPornumero(@PathVariable Long id, @PathVariable Integer numero) {
+        return serieService.obterTemporadasPornumero(id,numero);
+    }
+
+
+    @GetMapping("/{id}")
+    public SerieDTO obterSeriePorId(@PathVariable Long id) {
+        return serieService.obterPorId(id);
+    }
 }
