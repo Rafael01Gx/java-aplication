@@ -2,12 +2,13 @@ package br.com.alura.screenmatch.controller;
 
 import br.com.alura.screenmatch.dto.EpisodioDTO;
 import br.com.alura.screenmatch.dto.SerieDTO;
+import br.com.alura.screenmatch.model.Serie;
 import br.com.alura.screenmatch.service.SerieService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,38 +19,46 @@ public class SerieController {
     private SerieService serieService;
 
     @GetMapping
-    public List<SerieDTO> obterSeries() {
-        return serieService.obterTodasAsSeries();
+    public ResponseEntity<List<SerieDTO>> obterSeries() {
+        return ResponseEntity.ok(serieService.obterTodasAsSeries());
     }
 
     @GetMapping("/top5")
-    public List<SerieDTO> obterTop5Series() {
-        return serieService.obterTop5Series();
+    public ResponseEntity<List<SerieDTO>> obterTop5Series() {
+        return ResponseEntity.ok(serieService.obterTop5Series());
     }
 
     @GetMapping("/lancamentos")
-    public List<SerieDTO> obterLancamentos() {
-        return serieService.obterLancamentos();
+    public ResponseEntity<List<SerieDTO>> obterLancamentos() {
+        return ResponseEntity.ok(serieService.obterLancamentos());
     }
 
     @GetMapping("/categoria/{nomeGenero}")
-    public List<SerieDTO> obterSeriesPorCategoria(@PathVariable String nomeGenero) {
-        return serieService.obterSeriesPorCategoria(nomeGenero);
+    public ResponseEntity<List<SerieDTO>> obterSeriesPorCategoria(@PathVariable String nomeGenero) {
+        return ResponseEntity.ok(serieService.obterSeriesPorCategoria(nomeGenero));
     }
 
 
     @GetMapping("/{id}/temporadas/todas")
-    public List<EpisodioDTO> obterTodasTemporadas(@PathVariable Long id) {
-        return serieService.obterTodasTemporadas(id);
+    public ResponseEntity<List<EpisodioDTO>> obterTodasTemporadas(@PathVariable Long id) {
+        return ResponseEntity.ok(serieService.obterTodasTemporadas(id));
     }
+
     @GetMapping("/{id}/temporadas/{numero}")
-    public List<EpisodioDTO> obterTemporadasPornumero(@PathVariable Long id, @PathVariable Integer numero) {
-        return serieService.obterTemporadasPornumero(id,numero);
+    public ResponseEntity<List<EpisodioDTO>> obterTemporadasPornumero(@PathVariable Long id, @PathVariable Integer numero) {
+        return ResponseEntity.ok(serieService.obterTemporadasPornumero(id, numero));
     }
 
 
     @GetMapping("/{id}")
-    public SerieDTO obterSeriePorId(@PathVariable Long id) {
-        return serieService.obterPorId(id);
+    public ResponseEntity<SerieDTO> obterSeriePorId(@PathVariable Long id) {
+        return ResponseEntity.ok(serieService.obterPorId(id));
+    }
+
+    @PostMapping
+    @Transactional
+    public ResponseEntity<Serie> criarNovaSerie(@RequestBody @Validated Serie dados){
+
+        return ResponseEntity.ok(serieService.criarNovaSerie(dados));
     }
 }

@@ -75,4 +75,8 @@ public class SerieService {
         Categoria categoria = Categoria.fromPortugues(nomeGenero);
         return converteDados(repositorio.findByGenero(categoria));
     }
+
+    public Serie criarNovaSerie(Serie dados) {
+        return repositorio.save(dados);
+    }
 }
